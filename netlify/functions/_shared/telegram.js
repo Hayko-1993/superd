@@ -12,11 +12,15 @@ async function sendTelegram(message) {
   await Promise.all(
     TELEGRAM_CHAT_IDS.map(async (chatId) => {
       try {
-        await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+        const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'HTML' }),
         })
+        const data = await res.json().catch(() => ({}))
+        if (!res.ok || data.ok === false) {
+          console.error(`Telegram failed for chat ${chatId}:`, data.description || res.status)
+        }
       } catch (e) {
         console.error(`Telegram error (chat ${chatId}):`, e)
       }

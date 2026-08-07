@@ -507,7 +507,7 @@ a {
 .sd-login-topbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 18px 28px;
   background: transparent;
 }

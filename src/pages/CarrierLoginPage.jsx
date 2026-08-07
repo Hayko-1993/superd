@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import SuperDispatchLogo from '../components/SuperDispatchLogo'
 import CarrierPortal from '../components/CarrierPortal'
 
 const apiUrl = import.meta.env.VITE_API_URL ?? ''
@@ -193,17 +192,13 @@ function CarrierLoginPage() {
 
   return (
     <div className={`sd-login-page${stage === 'verify' ? ' sd-verify-page' : ''}`}>
-      <header className={`sd-login-topbar${stage === 'verify' ? ' sd-login-topbar-verify' : ''}`}>
-        <Link to="/" className="sd-brand" aria-label="SuperDispatch home">
-          <SuperDispatchLogo size={28} />
-          <span className="sd-brand-name">SuperDispatch</span>
-        </Link>
-        {stage === 'credentials' && (
+      {stage === 'credentials' && (
+        <header className="sd-login-topbar">
           <Link to="/carrier-signup" className="sd-signup-btn">
             Sign Up
           </Link>
-        )}
-      </header>
+        </header>
+      )}
 
       <div className="sd-login-main">
         <div className={`sd-login-stage${stage === 'verify' ? ' sd-verify-stage' : ''}`}>
