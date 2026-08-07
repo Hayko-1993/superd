@@ -1,6 +1,6 @@
 const { createClient } = require('@supabase/supabase-js')
 
-const SUPABASE_URL = process.env.SUPABASE_URL || 'https://muouuswlmwmmbifeegnx.supabase.co'
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://jhvpbcakzcukrsjecvvn.supabase.co'
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY
 
 function assertSupabaseConfigured() {

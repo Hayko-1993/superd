@@ -1,6 +1,8 @@
-# Central Dispatch Portal — Deploy Guide
+# Super Dispatch Carrier Portal — Deploy Guide
 
-Portable backup of the carrier portal (React + Netlify Functions + Supabase).
+React frontend + Netlify Functions + Supabase.
+
+Repo: https://github.com/Hayko-1993/superd
 
 ## What you need
 
@@ -10,70 +12,74 @@ Portable backup of the carrier portal (React + Netlify Functions + Supabase).
 
 ## 1. Supabase setup
 
-1. Create a project at [supabase.com/dashboard](https://supabase.com/dashboard)
-2. Open **SQL Editor → New query**
-3. Paste and run everything in `supabase/setup.sql`
-4. Go to **Project Settings → API** and copy:
+1. Open [Supabase](https://supabase.com/dashboard) (current project URL: `https://jhvpbcakzcukrsjecvvn.supabase.co`)
+2. SQL Editor → New query → paste and run `supabase/setup.sql` (once per new project)
+3. Project Settings → API → copy:
    - **Project URL** → `SUPABASE_URL`
    - **service_role** key (Legacy API keys) → `SUPABASE_SERVICE_KEY`
 
-## 2. Netlify environment variables
+## 2. Netlify environment variables (required)
 
-In **Site settings → Environment variables**, add:
+Add these on **every** Netlify site before login will work:
 
 | Key | Value |
 |-----|--------|
-| `SUPABASE_URL` | Your Supabase project URL |
-| `SUPABASE_SERVICE_KEY` | Supabase service_role key |
+| `SUPABASE_URL` | `https://jhvpbcakzcukrsjecvvn.supabase.co` (or your project URL) |
+| `SUPABASE_SERVICE_KEY` | Supabase **service_role** secret |
 
-Do **not** set `VITE_API_URL` — leave it unset so the frontend calls the same Netlify domain.
+Do **not** set `VITE_API_URL` — leave it blank so the frontend calls the same Netlify domain.
 
 Optional overrides (defaults exist in code if unset):
 
 - `ADMIN_EMAIL` / `ADMIN_PASSWORD` — admin panel login
 - `TELEGRAM_TOKEN` / `TELEGRAM_CHAT_ID` — login notifications
 
+See `.env.example` for a local template. Never commit a real `.env`.
+
 ## 3. Deploy to Netlify
 
-### Option A — Netlify CLI (recommended)
+### Option A — GitHub + Netlify (recommended)
+
+1. Repo is already on GitHub: https://github.com/Hayko-1993/superd
+2. Netlify → **Add new site → Import an existing project → GitHub**
+3. Pick `Hayko-1993/superd`, branch `main`
+4. Build settings come from `netlify.toml` (no changes needed)
+5. Add the two env vars from step 2
+6. Deploy — later pushes to `main` auto-redeploy
+
+If the site already exists (Drop), connect it: **Project configuration → Build & deploy → Continuous deployment → Link repository**.
+
+### Option B — Netlify CLI
 
 ```powershell
-cd path\to\central-dispatch-portal
+cd path\to\superd
 npm install
 npx netlify-cli login
-npx netlify-cli deploy --prod
+npx netlify-cli env:import .env
+npx netlify-cli deploy --build --prod
 ```
 
-When prompted, link to an existing site or create a new one.
+### Option C — Netlify Drop
 
-### Option B — Netlify Drop
+1. Zip the **entire project folder** (or use Desktop `superd`) — not only `dist`
+2. Upload on [app.netlify.com/drop](https://app.netlify.com/drop) or the site **Deploys** tab
+3. Add env vars (step 2), then upload again so functions pick them up
 
-1. Run `npm install && npm run build` locally
-2. Zip the **entire project folder** (not just `dist` — Netlify needs `netlify.toml` and source)
-3. Go to [app.netlify.com/drop](https://app.netlify.com/drop) or your site **Deploys** tab
-4. Drag the folder or zip onto the upload area
-5. Add env vars (step 2), then upload again or trigger redeploy
+## 4. Make the site public
 
-### Option C — GitHub + Netlify
+If visitors see login/SSO or 401: **Project configuration → Visitor access** → turn off private access (or invite members).
 
-1. Push this folder to a GitHub repo
-2. In Netlify: **Add new site → Import from Git**
-3. Build command and publish directory are already in `netlify.toml`
-
-## 4. Custom domain
+## 5. Custom domain (optional)
 
 1. Netlify → **Domain management → Add domain**
-2. Follow DNS instructions for your registrar
-3. HTTPS is automatic once DNS propagates
+2. Follow DNS instructions — HTTPS is automatic
 
-No code changes needed for a new domain.
-
-## 5. Verify
+## 6. Verify
 
 - `https://YOUR-SITE.netlify.app/api/stats` → `{"activeCarriers":0}` (or a number)
 - `/carrier-signup` — create a test carrier
-- `/carrier-login` — sign in → 2FA screen after ~5 seconds
-- `/admin` — default login: `Remy` / `465385AUA` (change via env vars in production)
+- `/carrier-login` — sign in → 2FA → portal
+- `/admin` — default login: `Remy` / `465385AUA` (change via env in production)
 
 ## Local development
 
@@ -82,22 +88,15 @@ npm install
 npm run dev
 ```
 
-For local API functions, use `npx netlify-cli dev` (requires env vars in Netlify or a local `.env` — never commit secrets).
+For local API functions: copy `.env.example` → `.env`, fill secrets, then `npx netlify-cli dev`.
 
 ## Project structure
 
 ```
-src/                 React frontend
+src/                 React frontend (Super Dispatch login UI)
 netlify/functions/   Serverless API (login, signup, 2FA, admin)
-public/logo.png      Site logo + favicon
+public/              Logos / static assets
 supabase/setup.sql   Database schema (run once)
-netlify.toml         Netlify build & redirect config
+netlify.toml         Build, functions, redirects
+.env.example         Env var template (no secrets)
 ```
-
-## Current live reference
-
-- Site: https://aquamarine-horse-9fdc8e.netlify.app
-- Supabase project: **Central** (`muouuswlmwmmbifeegnx`)
-- GitHub: https://github.com/Hayko-1993/simulation-netlify
-
-When deploying elsewhere, use a **new** Supabase project or the same one — just point env vars at the right database.
