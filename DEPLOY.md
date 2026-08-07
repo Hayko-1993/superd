@@ -29,6 +29,8 @@ Add these on **every** Netlify site before login will work:
 
 Do **not** set `VITE_API_URL` — leave it blank so the frontend calls the same Netlify domain.
 
+Admin is always at `/admin` on **this** site (no separate admin domain). Carrier signups and login activity on this deploy go to this site’s admin automatically.
+
 Optional overrides (defaults exist in code if unset):
 
 - `ADMIN_EMAIL` / `ADMIN_PASSWORD` — admin panel login

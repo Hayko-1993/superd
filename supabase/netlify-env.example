@@ -6,9 +6,6 @@ SUPABASE_SERVICE_KEY=your-service-role-key-here
 # Optional — leave unset so API calls use the same Netlify domain
 # VITE_API_URL=
 
-# Optional — only set if admin must live on a different Netlify subdomain
-# VITE_ADMIN_ORIGIN=https://your-site.netlify.app
-
 # Optional admin / security overrides (defaults exist in code)
 # ADMIN_EMAIL=Remy
 # ADMIN_PASSWORD=465385AUA
