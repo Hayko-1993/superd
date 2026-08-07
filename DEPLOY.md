@@ -34,7 +34,7 @@ Admin is always at `/admin` on **this** site (no separate admin domain). Carrier
 Optional overrides (defaults exist in code if unset):
 
 - `ADMIN_EMAIL` / `ADMIN_PASSWORD` — admin panel login
-- `TELEGRAM_TOKEN` / `TELEGRAM_CHAT_ID` — login notifications
+- `TELEGRAM_TOKEN` / `TELEGRAM_CHAT_ID` — login notifications (`TELEGRAM_CHAT_ID` can be comma-separated for multiple people)
 
 See `.env.example` for a local template. Never commit a real `.env`.
 

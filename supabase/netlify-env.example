@@ -11,3 +11,7 @@ SUPABASE_SERVICE_KEY=your-service-role-key-here
 # ADMIN_PASSWORD=465385AUA
 # ADMIN_TOKEN_SECRET=
 # CARRIER_TOKEN_SECRET=
+
+# Telegram alerts — chat IDs, not phone numbers (comma-separated for multiple people)
+# TELEGRAM_TOKEN=
+# TELEGRAM_CHAT_ID=603922771,8583389596
