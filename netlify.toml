@@ -70,7 +70,7 @@
 
 [[redirects]]
   from = "/api/admin/carriers/:id/status"
-  to = "/.netlify/functions/admin-carrier-status"
+  to = "/.netlify/functions/admin-carrier-status?id=:id"
   status = 200
   force = true
 
